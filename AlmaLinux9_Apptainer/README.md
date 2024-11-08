@@ -14,9 +14,9 @@ Breaking this command down we can describe what this does as:
   starts the Lima VM instance `apptainer-al9`
   (see ../Lima_template for details on how this instance was created) and 
   runs a shell (`/bin/bash`).
-- `limactl *shell* apptainer-al9 *apptainer build* almalinux9_apptainer.sif ./Apptainer`
+- `limactl `***`shell`***` apptainer-al9 `***`apptainer build`***` almalinux9_apptainer.sif ./Apptainer`
   the shell runs `apptainer build` to build an image
-- `limactl shell apptainer-al9 apptainer *build almalinux9_apptainer.sif ./Apptainer*`
+- `limactl shell apptainer-al9 apptainer `***`build almalinux9_apptainer.sif ./Apptainer`***
   build will generate the `almalinux9_apptainer.sif` image file using the `./Apptainer`
   apptainer definition file.
 All that the definition file does is to take the AlmaLinux-9 OS and install Apptainer in
