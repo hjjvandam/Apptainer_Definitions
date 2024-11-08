@@ -1,0 +1,37 @@
+# A template to use Apptainer instead of containerd & nerdctl
+# $ limactl start ./apptainer.yaml
+# $ limactl shell apptainer apptainer run -u -B $HOME:$HOME docker://alpine
+
+images:
+# Try to use release-yyyyMMdd image if available. Note that release-yyyyMMdd will be removed after several months.
+- location: "https://repo.almalinux.org/almalinux/9.4/cloud/x86_64/images/AlmaLinux-9-GenericCloud-9.4-20240805.x86_64.qcow2"
+  arch: "x86_64"
+  digest: "sha256:4f2984589020c0d82b9a410cf9e29715a607c948dfdca652025cdc79ddb5e816"
+- location: "https://repo.almalinux.org/almalinux/9.4/cloud/aarch64/images/AlmaLinux-9-GenericCloud-9.4-20240805.aarch64.qcow2"
+  arch: "aarch64"
+  digest: "sha256:433e7a79b7c49007723851b7721c69a8f0a08be48969c04c1c9252cc16adc893"
+# Fallback to the latest release image.
+# Hint: run `limactl prune` to invalidate the cache
+- location: "https://repo.almalinux.org/almalinux/9/cloud/x86_64/images/AlmaLinux-9-GenericCloud-latest.x86_64.qcow2"
+  arch: "x86_64"
+- location: "https://repo.almalinux.org/almalinux/9/cloud/aarch64/images/AlmaLinux-9-GenericCloud-latest.aarch64.qcow2"
+  arch: "aarch64"
+
+mounts:
+- location: "~"
+- location: "/tmp/lima"
+- location: "/opt/homebrew/Cellar/lima/1.0.0/share/lima/templates"
+- location: "/Users/hubertusvandam/Documents/Apptainer_Definitions"
+  writable: true
+containerd:
+  system: false
+  user: false
+provision:
+- mode: system
+  script: |
+    #!/bin/bash
+    sysctl --system
+    # add the "Official PPA for Apptainer"
+    yum  -y install epel-release
+    yum update
+    yum -y install apptainer
