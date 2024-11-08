@@ -1,0 +1,49 @@
+Bootstrap: localimage
+# Cached apptainer-al9 image
+From: ../AlmaLinux9_Apptainer/almalinux9_apptainer.sif
+Stage: build
+
+%help
+    This build file adds all the components needed to add 
+    new packages to Spack. Obviously we need to add our 
+    Spack fork. Then, of course, we can also use that
+    instance of Spack to install most tools we need.
+    Git is the obvious exception as we need that to clone
+    Spack.
+
+%files
+    # We need SSH for authentication to push changes
+    {{ home }}/.ssh/config ~/.ssh/config
+    {{ home }}/.ssh/id_rsa ~/.ssh/id_rsa
+
+%post
+    #!/bin/bash
+    dnf install -y git
+    dnf install -y gcc
+    dnf install -y gcc-c++
+    dnf install -y gcc-gfortran
+    dnf install -y patch
+    dnf install -y tar
+    dnf install -y gzip unzip bzip2 xz
+    dnf install -y file
+    dnf install -y lsb-release
+    dnf install -y gnupg2
+    dnf install -y procps
+    git clone --depth=10 https://github.com/hjjvandam/spack.git -b develop
+    . ./spack/share/spack/setup-env.sh
+    spack install environment-modules
+    cat <<EOF > $HOME/.spack/modules.yaml
+    modules:
+      default:
+        enable:
+          - tcl
+        tcl:
+          hide_implicits: true
+          all:
+            autoload: direct
+    EOF
+    . $(spack location -i environment-modules)/init/bash
+    . ./spack/share/spack/setup-env.sh
+    spack install mpich
+    spack install cmake
+    
