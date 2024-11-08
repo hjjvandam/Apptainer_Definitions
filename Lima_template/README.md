@@ -1,4 +1,4 @@
-#Lima template
+# Lima template
 
 On MacOS we cannot run Apptainer directly. We need a Virtual Machine (VM) to run 
 containers in. [Lima](https://lima-vm.io/) is the VM that comes with
