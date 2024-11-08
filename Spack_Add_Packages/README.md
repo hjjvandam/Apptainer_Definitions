@@ -1,4 +1,4 @@
-#Container setup for adding packages to the Spack package manager
+# Container setup for adding packages to the Spack package manager
 
 This definition file builds a container op top of an Apptainer image with
 AlmaLinux-9 that was created as described in [AlmaLinux9_Apptainer](../AlmaLinux9_Apptainer).
