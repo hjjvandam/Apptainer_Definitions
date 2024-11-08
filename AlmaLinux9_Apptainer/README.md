@@ -10,7 +10,7 @@ the image of which we will store. To build the image run
  limactl shell apptainer-al9 apptainer build almalinux9_apptainer.sif ./Apptainer
 ``` 
 Breaking this command down we can describe what this does as:
-- `<B>limactl shell apptainer-al9</B> apptainer build almalinux9_apptainer.sif ./Apptainer`
+- `\<B\>limactl shell apptainer-al9\<\/B\> apptainer build almalinux9_apptainer.sif ./Apptainer`
   starts the Lima VM instance `apptainer-al9`
   (see ../Lima_template for details on how this instance was created) and 
   runs a shell (`/bin/bash`).
