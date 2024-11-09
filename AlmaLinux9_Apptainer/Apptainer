@@ -1,0 +1,13 @@
+Bootstrap: yum
+OSVersion: 9
+MirrorURL: http://repo.almalinux.org/almalinux/%{OSVERSION}/BaseOS/$basearch/os
+Include: dnf
+Stage: build
+
+%post
+    #!/bin/bash
+    dnf update
+    # add the "Official PPA for Apptainer"
+    dnf install -y epel-release
+    # now install apptainer
+    dnf install -y apptainer
