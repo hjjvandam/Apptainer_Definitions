@@ -11,3 +11,5 @@ Stage: build
     dnf install -y epel-release
     # now install apptainer
     dnf install -y apptainer
+    dnf install -y which
+    dnf install -y vim
