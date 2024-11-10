@@ -31,6 +31,8 @@ Stage: build
     dnf install -y procps
     dnf install -y mpich
     dnf install -y openssl
+    dnf install -y findutils
+    cd $HOME
     git clone --depth=10 https://github.com/hjjvandam/spack.git -b develop
     . ./spack/share/spack/setup-env.sh
     spack install environment-modules
@@ -44,8 +46,20 @@ Stage: build
           all:
             autoload: direct
 EOF
+    # When the container is created you are root,
+    # but when the container is run you are an unprivileged user
+    # with a username that depends on your local username.
+    # So we need to add settings in a way such that any user
+    # picks automatically picks them up. Putting the settings
+    # in /etc/bashrc seems the best option.
+    cat <<EOF >> /etc/bashrc
+    . /root/spack/share/spack/setup-env.sh
+    . $(spack location -i environment-modules)/init/bash
+    . /root/spack/share/spack/setup-env.sh
+    alias vi="vim"
+EOF
     . $(spack location -i environment-modules)/init/bash
     . ./spack/share/spack/setup-env.sh
     #spack install mpich # install fails: Error: TypeError: expected str, bytes or os.PathLike object, not tuple
     spack install cmake
-    
+
