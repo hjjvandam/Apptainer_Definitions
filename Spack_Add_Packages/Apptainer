@@ -57,6 +57,8 @@ EOF
     . $(spack location -i environment-modules)/init/bash
     . /root/spack/share/spack/setup-env.sh
     alias vi="vim"
+    export EDITOR="/usr/bin/vim"
+    export VISUAL="/usr/bin/vim"
 EOF
     . $(spack location -i environment-modules)/init/bash
     . ./spack/share/spack/setup-env.sh
