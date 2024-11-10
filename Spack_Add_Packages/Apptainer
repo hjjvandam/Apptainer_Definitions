@@ -29,6 +29,8 @@ Stage: build
     dnf install -y lsb-release
     dnf install -y gnupg2
     dnf install -y procps
+    dnf install -y mpich
+    dnf install -y openssl
     git clone --depth=10 https://github.com/hjjvandam/spack.git -b develop
     . ./spack/share/spack/setup-env.sh
     spack install environment-modules
@@ -41,9 +43,9 @@ Stage: build
           hide_implicits: true
           all:
             autoload: direct
-    EOF
+EOF
     . $(spack location -i environment-modules)/init/bash
     . ./spack/share/spack/setup-env.sh
-    spack install mpich
+    #spack install mpich # install fails: Error: TypeError: expected str, bytes or os.PathLike object, not tuple
     spack install cmake
     
