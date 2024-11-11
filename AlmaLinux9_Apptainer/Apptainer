@@ -4,8 +4,7 @@ MirrorURL: http://repo.almalinux.org/almalinux/%{OSVERSION}/BaseOS/$basearch/os
 Include: dnf
 Stage: build
 
-%post
-    #!/bin/bash
+%post -c /bin/bash
     dnf update
     # add the "Official PPA for Apptainer"
     dnf install -y epel-release
