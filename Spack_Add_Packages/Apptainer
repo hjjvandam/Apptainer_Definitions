@@ -20,10 +20,11 @@ Stage: build
 #    {{ home }}/.ssh/id_rsa ~/.ssh/id_rsa
 
 %post -c /bin/bash
+    dnf install -y --nobest perl
     dnf install -y git
-    dnf install -y gcc
-    dnf install -y gcc-c++
-    dnf install -y gcc-gfortran
+    dnf install -y --nobest gcc
+    dnf install -y --nobest gcc-c++
+    dnf install -y --nobest gcc-gfortran
     dnf install -y patch
     dnf install -y tar
     dnf install -y gzip unzip bzip2 xz
@@ -46,17 +47,28 @@ Stage: build
     # container.
     git clone --depth=10 https://github.com/hjjvandam/spack.git -b develop
     . /root/spack/share/spack/setup-env.sh
-    spack install environment-modules
-    cat <<EOF > $HOME/.spack/modules.yaml
-    modules:
-      default:
-        enable:
-          - tcl
-        tcl:
-          hide_implicits: true
-          all:
-            autoload: direct
-EOF
+    #spack install environment-modules
+    #spack install lmod
+    mkdir -p $HOME/.spack
+    #cat <<EOF > $HOME/.spack/modules.yaml
+    #modules:
+    #  default:
+    #    roots:
+    #      tcl: {{ home }}/Documents/spack.nosync/share/spack/modules
+    #      lmod: {{ home }}/Documents/spack.nosync/share/spack/lmod
+    #    arch_folder: false
+    #    enable:
+    #    - tcl
+    #    - lmod
+    #    tcl:
+    #      hide_implicits: true
+    #      all:
+    #        autoload: direct
+    #    lmod:
+    #      hide_implicits: true
+    #      all:
+    #        autoload: direct
+    #EOF
     # When the container is created you are root,
     # but when the container is run you are an unprivileged user
     # with a username that depends on your host username.
@@ -69,18 +81,26 @@ EOF
     # then we initialize the Spack setup we want use but with the
     # modules initialized it should pickup the modules installation
     # properly.
+    mkdir -p \$HOME/.spack
+    #cp /root/.spack/modules.yaml \$HOME/.spack/.
     . /root/spack/share/spack/setup-env.sh
-    . $(spack location -i environment-modules)/init/bash
-    module use {{ home }}/Documents/spack/modulefiles
-    . {{ home }}/Documents/spack/share/spack/setup-env.sh
+    #module use {{ home }}/Documents/spack/modulefiles
+    #. $(spack location -i environment-modules)/init/bash
+    #. $(spack location -i lmod)/init/bash
+    #module use {{ home }}/Documents/spack/modulefiles
+    . {{ home }}/Documents/spack.nosync/share/spack/setup-env.sh
     alias vi="vim"
     export EDITOR="/usr/bin/vim"
     export VISUAL="/usr/bin/vim"
+    export CC="/usr/bin/gcc"
+    export CXX="/usr/bin/g++"
+    export FC="/usr/bin/gfortran"
 EOF
-    . $(spack location -i environment-modules)/init/bash
-    module use {{ home }}/Documents/spack/modulefiles
+    #. $(spack location -i environment-modules)/init/bash
+    #. $(spack location -i lmod)/init/bash
+    #module use {{ home }}/Documents/spack/modulefiles
     . /root/spack/share/spack/setup-env.sh
-    #. /Users/hubertusvandam/Documents/spack/share/spack/setup-env.sh
+    #. /Users/hubertusvandam/Documents/spack.nosync/share/spack/setup-env.sh
     #spack install mpich # install fails: Error: TypeError: expected str, bytes or os.PathLike object, not tuple
     #spack install cmake
 
