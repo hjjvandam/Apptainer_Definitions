@@ -47,6 +47,7 @@ Stage: build
     # container.
     git clone --depth=10 https://github.com/hjjvandam/spack.git -b develop
     . /root/spack/share/spack/setup-env.sh
+    #spack config add concretizer:unify:false
     #spack install environment-modules
     #spack install lmod
     mkdir -p $HOME/.spack
@@ -89,6 +90,7 @@ Stage: build
     #. $(spack location -i lmod)/init/bash
     #module use {{ home }}/Documents/spack/modulefiles
     . {{ home }}/Documents/spack.nosync/share/spack/setup-env.sh
+    #spack config add concretizer:unify:false
     alias vi="vim"
     export EDITOR="/usr/bin/vim"
     export VISUAL="/usr/bin/vim"
