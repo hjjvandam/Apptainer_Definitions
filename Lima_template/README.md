@@ -18,7 +18,11 @@ such.
 If we assume that we copy the Lima template to the templates directory
 then we can instantiate the VM with
 ```bash
-limactl start template://apptainer-al9
+limactl start --memory=8 template://apptainer-al9
+```
+otherwise we can instantiate the VM from this directory with
+```bash
+limactl start --memory=8 ./apptainer-al9.yaml
 ```
 Next you can run something in the VM with
 ```bash
