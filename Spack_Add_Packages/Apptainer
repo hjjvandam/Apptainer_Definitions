@@ -36,6 +36,7 @@ Stage: build
     dnf install -y openmpi
     dnf install -y openssl
     dnf install -y findutils
+    dnf install -y wget
     cd $HOME
     # Here life gets interesting. As we cannot push code to github from within
     # a running Apptainer the Spack sources we want to change need to live in
