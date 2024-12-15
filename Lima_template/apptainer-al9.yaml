@@ -17,11 +17,14 @@ images:
 - location: "https://repo.almalinux.org/almalinux/9/cloud/aarch64/images/AlmaLinux-9-GenericCloud-latest.aarch64.qcow2"
   arch: "aarch64"
 
+# There is very little documentation (no) how "mounts:" works. So currently
+# I mount the entire ~/Documents folders which is a lot more than I need,
+# but it works for me.
 mounts:
 - location: "~"
 - location: "/tmp/lima"
 - location: "/opt/homebrew/Cellar/lima/1.0.0/share/lima/templates"
-- location: "/Users/hubertusvandam/Documents/Apptainer_Definitions"
+- location: "/Users/hubertusvandam/Documents"
   writable: true
 containerd:
   system: false

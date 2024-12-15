@@ -7,7 +7,7 @@ for other projects.
 The file `Apptainer` contains an Apptainer definition file that builds the container
 the image of which we will store. To build the image run
 ```bash
- limactl shell apptainer-al9 apptainer build almalinux9_apptainer.sif ./Apptainer
+limactl shell apptainer-al9 apptainer build almalinux9_apptainer.sif ./Apptainer
 ``` 
 Breaking this command down we can describe what this does as:
 - ***`limactl shell apptainer-al9`***` apptainer build almalinux9_apptainer.sif ./Apptainer`
@@ -21,3 +21,10 @@ Breaking this command down we can describe what this does as:
   apptainer definition file.
 All that the definition file does is to take the AlmaLinux-9 OS and install Apptainer in
 it. Then the build command will save the image.
+
+To run the apptainer use the following command
+```bash
+limactl shell apptainer-al9 apptainer exec --bind $HOME almalinux9_apptainer.sif bash
+```
+The `--bind $HOME` flag binds the users home directory on the host system to the same
+location in the container.

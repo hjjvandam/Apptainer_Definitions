@@ -11,17 +11,20 @@ Stage: build
     Git is the obvious exception as we need that to clone
     Spack.
 
-%files
-    # We need SSH for authentication to push changes
-    {{ home }}/.ssh/config ~/.ssh/config
-    {{ home }}/.ssh/id_rsa ~/.ssh/id_rsa
+# The following is not needed if we mount the home directory
+# because then we can ssh-add our credentials with the
+# absolute filename of our private key on the host machine.
+#%files
+#    # We need SSH for authentication to push changes
+#    {{ home }}/.ssh/config ~/.ssh/config
+#    {{ home }}/.ssh/id_rsa ~/.ssh/id_rsa
 
-%post
-    #!/bin/bash
+%post -c /bin/bash
+    dnf install -y --nobest perl
     dnf install -y git
-    dnf install -y gcc
-    dnf install -y gcc-c++
-    dnf install -y gcc-gfortran
+    dnf install -y --nobest gcc
+    dnf install -y --nobest gcc-c++
+    dnf install -y --nobest gcc-gfortran
     dnf install -y patch
     dnf install -y tar
     dnf install -y gzip unzip bzip2 xz
@@ -29,21 +32,78 @@ Stage: build
     dnf install -y lsb-release
     dnf install -y gnupg2
     dnf install -y procps
+    dnf install -y mpich
+    dnf install -y openmpi
+    dnf install -y openssl
+    dnf install -y findutils
+    dnf install -y wget
+    cd $HOME
+    # Here life gets interesting. As we cannot push code to github from within
+    # a running Apptainer the Spack sources we want to change need to live in
+    # folder on the host. During building an Apptainer the external mounted
+    # filesystems are not accessible. Therefore I cannot use the host spack 
+    # version to set Spack related stuff up in the container. Hence
+    # I need to install Spack in the container for building the container.
+    # But I need to switch to the host Spack installation when running the 
+    # container.
     git clone --depth=10 https://github.com/hjjvandam/spack.git -b develop
-    . ./spack/share/spack/setup-env.sh
-    spack install environment-modules
-    cat <<EOF > $HOME/.spack/modules.yaml
-    modules:
-      default:
-        enable:
-          - tcl
-        tcl:
-          hide_implicits: true
-          all:
-            autoload: direct
-    EOF
-    . $(spack location -i environment-modules)/init/bash
-    . ./spack/share/spack/setup-env.sh
-    spack install mpich
-    spack install cmake
-    
+    . /root/spack/share/spack/setup-env.sh
+    #spack config add concretizer:unify:false
+    #spack install environment-modules
+    #spack install lmod
+    mkdir -p $HOME/.spack
+    #cat <<EOF > $HOME/.spack/modules.yaml
+    #modules:
+    #  default:
+    #    roots:
+    #      tcl: {{ home }}/Documents/spack.nosync/share/spack/modules
+    #      lmod: {{ home }}/Documents/spack.nosync/share/spack/lmod
+    #    arch_folder: false
+    #    enable:
+    #    - tcl
+    #    - lmod
+    #    tcl:
+    #      hide_implicits: true
+    #      all:
+    #        autoload: direct
+    #    lmod:
+    #      hide_implicits: true
+    #      all:
+    #        autoload: direct
+    #EOF
+    # When the container is created you are root,
+    # but when the container is run you are an unprivileged user
+    # with a username that depends on your host username.
+    # So we need to add settings in a way such that any user
+    # picks automatically picks them up. Putting the settings
+    # in /etc/bashrc seems the best option.
+    cat <<EOF >> /etc/bashrc
+    # Spack in /root knows where environment-modules is installed.
+    # With it we initialize the modules setup
+    # then we initialize the Spack setup we want use but with the
+    # modules initialized it should pickup the modules installation
+    # properly.
+    mkdir -p \$HOME/.spack
+    #cp /root/.spack/modules.yaml \$HOME/.spack/.
+    . /root/spack/share/spack/setup-env.sh
+    #module use {{ home }}/Documents/spack/modulefiles
+    #. $(spack location -i environment-modules)/init/bash
+    #. $(spack location -i lmod)/init/bash
+    #module use {{ home }}/Documents/spack/modulefiles
+    . {{ home }}/Documents/spack.nosync/share/spack/setup-env.sh
+    #spack config add concretizer:unify:false
+    alias vi="vim"
+    export EDITOR="/usr/bin/vim"
+    export VISUAL="/usr/bin/vim"
+    export CC="/usr/bin/gcc"
+    export CXX="/usr/bin/g++"
+    export FC="/usr/bin/gfortran"
+EOF
+    #. $(spack location -i environment-modules)/init/bash
+    #. $(spack location -i lmod)/init/bash
+    #module use {{ home }}/Documents/spack/modulefiles
+    . /root/spack/share/spack/setup-env.sh
+    #. /Users/hubertusvandam/Documents/spack.nosync/share/spack/setup-env.sh
+    #spack install mpich # install fails: Error: TypeError: expected str, bytes or os.PathLike object, not tuple
+    #spack install cmake
+
