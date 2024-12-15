@@ -1,0 +1,45 @@
+Bootstrap: localimage
+# Cached apptainer-al9 image
+From: ../AlmaLinux9_Apptainer/almalinux9_apptainer.sif
+Stage: build
+
+%help
+    This build file adds all the components needed to create
+    a sensible development environment for NWChem.
+
+%post -c /bin/bash
+    dnf install -y openssl
+    dnf install -y git
+    dnf install -y gcc
+    dnf install -y gcc-g++
+    dnf install -y gcc-gfortran
+    dnf install -y openmpi
+    dnf install -y findutils
+    dnf install -y autoconf
+    dnf install -y automake
+    dnf install -y libtool
+    dnf install -y pkg-config
+    dnf install -y binutils
+    dnf install -y patch
+    cd /usr/bin
+    ln -s python3.9 python
+    ln -s ld.bfd ld
+    cat <<EOF >> /etc/bashrc
+    alias vi="vim"
+    export ARMCI_NETWORK=MPI-TS
+    export BLAS_SIZE=8
+    export CC="/usr/bin/gcc"
+    export CXX="/usr/bin/g++"
+    export EDITOR="/usr/bin/vim"
+    export FC="/usr/bin/gfortran"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/usr/lib64/openmpi/lib"
+    export NWCHEM_MODULES="smallqm"
+    export PATH=$PATH:/usr/lib64/openmpi/bin
+    export VISUAL="/usr/bin/vim"
+    export USE_INTERNALBLAS=Y
+    if [ -e /Users/hubertusvandam/Documents/nwchem-1-noft.nosync/nwchem_make_env.sh ]
+    then
+      source /Users/hubertusvandam/Documents/nwchem-1-noft.nosync/nwchem_make_env.sh
+    fi
+    cd $NWCHEM_TOP
+EOF
