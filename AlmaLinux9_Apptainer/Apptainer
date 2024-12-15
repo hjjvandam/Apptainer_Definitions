@@ -6,6 +6,7 @@ Stage: build
 
 %post -c /bin/bash
     dnf update
+    dnf install -y ntp
     # add the "Official PPA for Apptainer"
     dnf install -y epel-release
     # now install apptainer
