@@ -13,6 +13,7 @@ Stage: build
     dnf install -y gcc
     dnf install -y gcc-g++
     dnf install -y gcc-gfortran
+    dnf install -y gdb
     dnf install -y openmpi
     dnf install -y findutils
     dnf install -y autoconf
@@ -21,9 +22,13 @@ Stage: build
     dnf install -y pkg-config
     dnf install -y binutils
     dnf install -y patch
+    dnf install -y python3
+    dnf install -y python3-pip
     cd /usr/bin
     ln -s python3.9 python
+    ln -s pip3 pip
     ln -s ld.bfd ld
+    pip install numpy
     cat <<EOF >> /etc/bashrc
     alias vi="vim"
     export ARMCI_NETWORK=MPI-TS
