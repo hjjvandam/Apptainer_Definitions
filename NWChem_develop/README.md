@@ -3,7 +3,7 @@
 This definition file builds a container op top of an Apptainer image with
 AlmaLinux-9 that was created as described in [AlmaLinux9_Apptainer](../AlmaLinux9_Apptainer).
 In this image we have added the Linux packages needed to develop the NOFT
-functionality in NWChem. 
+functionality in NWChem.
 
 To generate an image for this container run
 ```bash
