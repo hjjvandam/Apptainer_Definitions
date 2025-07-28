@@ -2,17 +2,17 @@
 
 In this project we assume that we have Apptainer. Next we need to create an image
 that includes AlmaLinux9 and Apptainer. This image can then be used as a base image
-for other projects. 
+for other projects.
 
 The file `Apptainer` contains an Apptainer definition file that builds the container
 the image of which we will store. To build the image run
 ```bash
 limactl shell apptainer-al9 apptainer build almalinux9_apptainer.sif ./Apptainer
-``` 
+```
 Breaking this command down we can describe what this does as:
 - ***`limactl shell apptainer-al9`***` apptainer build almalinux9_apptainer.sif ./Apptainer`
   starts the Lima VM instance `apptainer-al9`
-  (see ../Lima_template for details on how this instance was created) and 
+  (see ../Lima_template for details on how this instance was created) and
   runs a shell (`/bin/bash`).
 - `limactl `***`shell`***` apptainer-al9 `***`apptainer build`***` almalinux9_apptainer.sif ./Apptainer`
   the shell runs `apptainer build` to build an image
@@ -28,3 +28,6 @@ limactl shell apptainer-al9 apptainer exec --bind $HOME almalinux9_apptainer.sif
 ```
 The `--bind $HOME` flag binds the users home directory on the host system to the same
 location in the container.
+
+You can use different Apptainer versions by substituting the relevant version
+numbers.

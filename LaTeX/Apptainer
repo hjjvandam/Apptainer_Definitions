@@ -1,0 +1,44 @@
+Bootstrap: localimage
+# Cached apptainer-al10 image
+From: ../AlmaLinux9_Apptainer/almalinux10_apptainer.sif
+Stage: build
+
+%help
+    This build file adds all the components needed to write
+    documents in LaTeX.
+
+# The following is not needed if we mount the home directory
+# because then we can ssh-add our credentials with the
+# absolute filename of our private key on the host machine.
+#%files
+#    # We need SSH for authentication to push changes
+#    {{ home }}/.ssh/config ~/.ssh/config
+#    {{ home }}/.ssh/id_rsa ~/.ssh/id_rsa
+
+%post -c /bin/bash
+    dnf install -y --nobest perl
+    dnf install -y git
+    dnf install -y gzip unzip bzip2 xz
+    dnf install -y file
+    dnf install -y findutils
+    dnf install -y patch
+    dnf install -y tar
+    dnf install -y wget
+    wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+    tar -zxf install-tl-unx.tar.gz
+    cd install-tl-2*
+    perl ./install-tl --no-interaction --no-doc-install --no-src-install
+    cd $HOME
+    # When the container is created you are root,
+    # but when the container is run you are an unprivileged user
+    # with a username that depends on your host username.
+    # So we need to add settings in a way such that any user
+    # picks automatically picks them up. Putting the settings
+    # in /etc/bashrc seems the best option.
+    cat <<EOF >> /etc/bashrc
+    alias vi="vim"
+    export PATH="\$PATH:/usr/local/texlive/2025/bin/aarch64-linux/"
+    export EDITOR="/usr/bin/vim"
+    export VISUAL="/usr/bin/vim"
+EOF
+

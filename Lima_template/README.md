@@ -1,8 +1,8 @@
 # Lima template
 
-On MacOS we cannot run Apptainer directly. We need a Virtual Machine (VM) to run 
+On MacOS we cannot run Apptainer directly. We need a Virtual Machine (VM) to run
 containers in. [Lima](https://lima-vm.io/) is the VM that comes with
-[HomeBrew](https://brew.sh) and therefore we'll use that. 
+[HomeBrew](https://brew.sh) and therefore we'll use that.
 
 With Lima we can start a VM and run the AlmaLinux-9 OS. In this OS
 we can install [Apptainer](https://apptainer.org/) as a containerization tool.
@@ -29,3 +29,6 @@ Next you can run something in the VM with
 limactl shell apptainer-al9
 ```
 In this case the VM runs `bash`.
+
+Obviously instead of using AlmaLinux9 you could use a more recent
+version by replacing the version number in the corresponding places.
