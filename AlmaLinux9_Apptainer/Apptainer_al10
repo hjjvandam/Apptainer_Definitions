@@ -1,0 +1,15 @@
+Bootstrap: yum
+OSVersion: 10
+MirrorURL: https://repo.almalinux.org/almalinux/%{OSVERSION}/BaseOS/$basearch/os
+Include: dnf
+Stage: build
+
+%post -c /bin/bash
+    dnf update
+    dnf install -y ntp
+    # add the "Official PPA for Apptainer"
+    dnf install -y epel-release
+    # now install apptainer
+    dnf install -y apptainer
+    dnf install -y which
+    dnf install -y vim

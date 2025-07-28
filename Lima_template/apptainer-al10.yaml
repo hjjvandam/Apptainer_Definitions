@@ -1,0 +1,40 @@
+# A template to use Apptainer instead of containerd & nerdctl
+# $ limactl start ./apptainer.yaml
+# $ limactl shell apptainer apptainer run -u -B $HOME:$HOME docker://alpine
+
+images:
+# Try to use release-yyyyMMdd image if available. Note that release-yyyyMMdd will be removed after several months.
+- location: "https://repo.almalinux.org/almalinux/10/cloud/x86_64/images/AlmaLinux-10-GenericCloud-10.0-20250528.0.x86_64.qcow2"
+  arch: "x86_64"
+  digest: "sha256:9c528c5895c7fb5fc906add749d48057dbba4a4258a708c224aa3ef60fda14bd"
+- location: "https://repo.almalinux.org/almalinux/10/cloud/aarch64/images/AlmaLinux-10-GenericCloud-10.0-20250528.0.aarch64.qcow2"
+  arch: "aarch64"
+  digest: "sha256:34f255fab5d82f5470b173016cf7265282f09fc36a0c50fde72c9a7166c450ea"
+# Fallback to the latest release image.
+# Hint: run `limactl prune` to invalidate the cache
+- location: "https://repo.almalinux.org/almalinux/10/cloud/x86_64/images/AlmaLinux-10-GenericCloud-latest.x86_64.qcow2"
+  arch: "x86_64"
+- location: "https://repo.almalinux.org/almalinux/10/cloud/aarch64/images/AlmaLinux-10-GenericCloud-latest.aarch64.qcow2"
+  arch: "aarch64"
+
+# There is very little documentation (no) how "mounts:" works. So currently
+# I mount the entire ~/Documents folders which is a lot more than I need,
+# but it works for me.
+mounts:
+- location: "~"
+- location: "/tmp/lima"
+- location: "/opt/homebrew/Cellar/lima/1.0.0/share/lima/templates"
+- location: "/Users/hubertusvandam/Documents"
+  writable: true
+containerd:
+  system: false
+  user: false
+provision:
+- mode: system
+  script: |
+    #!/bin/bash
+    sysctl --system
+    # add the "Official PPA for Apptainer"
+    yum  -y install epel-release
+    yum update
+    yum -y install apptainer
