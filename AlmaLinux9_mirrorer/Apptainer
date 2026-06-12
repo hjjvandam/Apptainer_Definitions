@@ -8,7 +8,11 @@ Stage: build
     container up for mirroring x86_64 packages.
 
 %post -c /bin/bash
-    dnf install -y dnf-plugins-core
+    dnf install -y python3
+    dnf install -y python3-pip
+    cd /usr/bin
+    ln -s python3.9 python
+    ln -s ld.bfd ld
     cat <<EOF >> /etc/dnf/dnf.conf
     arch=x86_64
     ignorearch=True
