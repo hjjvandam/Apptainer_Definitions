@@ -14,8 +14,8 @@ Stage: build
     ln -s python3.9 python
     ln -s ld.bfd ld
     cat <<EOF >> /etc/dnf/dnf.conf
-    arch=x86_64
-    ignorearch=True
+arch=x86_64
+ignorearch=True
 EOF
     cat <<EOF >> /etc/bashrc
     alias vi="vim"
