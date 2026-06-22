@@ -9,5 +9,5 @@ libpng-devel
 libtiff-devel
 libjpeg-turbo-devel
 libpq-devel
-libicu-67
+libicu
 libicu-devel
