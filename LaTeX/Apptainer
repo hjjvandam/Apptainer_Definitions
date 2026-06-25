@@ -33,7 +33,7 @@ Stage: build
     # but when the container is run you are an unprivileged user
     # with a username that depends on your host username.
     # So we need to add settings in a way such that any user
-    # picks automatically picks them up. Putting the settings
+    # automatically picks them up. Putting the settings
     # in /etc/bashrc seems the best option.
     cat <<EOF >> /etc/bashrc
     alias vi="vim"
