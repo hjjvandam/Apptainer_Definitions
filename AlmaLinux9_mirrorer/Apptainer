@@ -1,0 +1,23 @@
+Bootstrap: localimage
+# Cached apptainer-al9 image
+From: ../AlmaLinux9_Apptainer/almalinux9_apptainer.sif
+Stage: build
+
+%help
+    This build file adds everything need to set this
+    container up for mirroring x86_64 packages.
+
+%post -c /bin/bash
+    dnf install -y python3
+    dnf install -y python3-pip
+    cd /usr/bin
+    ln -s python3.9 python
+    ln -s ld.bfd ld
+    cat <<EOF >> /etc/dnf/dnf.conf
+arch=x86_64
+ignorearch=True
+EOF
+    cat <<EOF >> /etc/bashrc
+    alias vi="vim"
+    export VISUAL="/usr/bin/vim"
+EOF

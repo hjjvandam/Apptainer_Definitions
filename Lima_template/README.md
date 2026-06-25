@@ -18,11 +18,11 @@ such.
 If we assume that we copy the Lima template to the templates directory
 then we can instantiate the VM with
 ```bash
-limactl start --memory=8 template://apptainer-al9
+limactl start --cpus=4 --memory=8 template://apptainer-al9
 ```
 otherwise we can instantiate the VM from this directory with
 ```bash
-limactl start --memory=8 ./apptainer-al9.yaml
+limactl start --cpus=4 --memory=8 ./apptainer-al9.yaml
 ```
 Next you can run something in the VM with
 ```bash
@@ -32,3 +32,7 @@ In this case the VM runs `bash`.
 
 Obviously instead of using AlmaLinux9 you could use a more recent
 version by replacing the version number in the corresponding places.
+
+Finally, the default number of CPUs is 4, but for the Monte Carlo
+optimization workload I want to use all 6 high performance cores of
+my Mac. So one should use `--cpus=6`.

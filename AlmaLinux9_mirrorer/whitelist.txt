@@ -1,0 +1,13 @@
+fontconfig-devel
+libcurl-devel
+openssl-devel
+libxml2-devel
+harfbuzz-devel
+fribidi-devel
+freetype-devel
+libpng-devel
+libtiff-devel
+libjpeg-turbo-devel
+libpq-devel
+libicu
+libicu-devel
